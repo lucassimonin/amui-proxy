@@ -1,0 +1,37 @@
+# =============================================================================
+# Reverse proxy Caddy partagé — héberge plusieurs sites sur un seul serveur.
+# Il possède les ports 80/443, obtient les certificats TLS (Let's Encrypt) pour
+# tous les domaines, et route chaque domaine vers l'app correspondante (qui,
+# elle, tourne en HTTP interne sur le réseau Docker « web »).
+#
+#   docker network create web        # une seule fois (réseau partagé)
+#   cp .env.dist .env                 # renseigner email + domaines
+#   docker compose up -d
+# =============================================================================
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL:?email ACME requis (Let's Encrypt)}
+      AMUI_DOMAIN: ${AMUI_DOMAIN:?domaine amuï requis}
+      CHEZMARCEL_DOMAIN: ${CHEZMARCEL_DOMAIN:?domaine chez-marcel requis}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # certificats TLS (persistants)
+      - caddy_config:/config
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:

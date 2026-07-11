@@ -1,0 +1,18 @@
+{
+	# Email pour Let's Encrypt (renouvellement / notifications)
+	email {$ACME_EMAIL}
+}
+
+# Chaque bloc = un domaine routé vers l'app correspondante (nom d'alias sur le
+# réseau Docker « web »). Caddy obtient le certificat TLS automatiquement.
+# Ajouter un bloc par nouveau projet.
+
+{$AMUI_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy amui-app:80
+}
+
+{$CHEZMARCEL_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy chezmarcel-app:80
+}
