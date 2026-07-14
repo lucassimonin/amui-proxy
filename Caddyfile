@@ -16,3 +16,13 @@
 	encode zstd gzip
 	reverse_proxy chezmarcel-app:80
 }
+
+# Redirections www → non-www (301) : évite le contenu dupliqué (SEO).
+# Nécessite un enregistrement DNS « www » pointant sur le serveur.
+www.{$AMUI_DOMAIN} {
+	redir https://{$AMUI_DOMAIN}{uri} permanent
+}
+
+www.{$CHEZMARCEL_DOMAIN} {
+	redir https://{$CHEZMARCEL_DOMAIN}{uri} permanent
+}
