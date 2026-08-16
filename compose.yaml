@@ -21,6 +21,7 @@ services:
       ACME_EMAIL: ${ACME_EMAIL:?email ACME requis (Let's Encrypt)}
       AMUI_DOMAIN: ${AMUI_DOMAIN:?domaine amuï requis}
       CHEZMARCEL_DOMAIN: ${CHEZMARCEL_DOMAIN:?domaine chez-marcel requis}
+      LUDORULES_DOMAIN: ${LUDORULES_DOMAIN:?domaine ludorules requis}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data       # certificats TLS (persistants)
