@@ -8,22 +8,25 @@ HTTP interne sur le réseau Docker partagé `web` et n'expose aucun port.
 Internet :80/:443
       │
    [ proxy Caddy ]                          ← ce dossier (80/443 + Let's Encrypt)
-   ┌────┴───────────┬─────────────────┐
-amui.dom       chezmarcel.dom     ludorules.com
-   │                 │                 │
-[amui-app]      [chezmarcel-app]   [ludorules-app]   ← HTTP interne (réseau « web »)
-   │                 │                 │
-[mysql amuï]    [mysql chez-marcel]  [sqlite fichier, volume dédié]
+   ┌────┴───────────┬─────────────────┬──────────────────────┐
+amui.dom       chezmarcel.dom     ludorules.com     oplaa.pro / app.oplaa.pro
+   │                 │                 │                      │
+[amui-app]      [chezmarcel-app]   [ludorules-app]       [oplaa-app]      ← HTTP interne (réseau « web »)
+   │                 │                 │                      │
+[mysql amuï]    [mysql chez-marcel]  [sqlite fichier]   [statique, données sur Supabase]
 ```
 
 `amui-app` et `chezmarcel-app` sont des apps FrankenPHP (Symfony) avec leur
 propre base MySQL. `ludorules-app` est une app Node.js (catalogue Ludorules)
 qui persiste ses données dans un fichier SQLite via un volume Docker, sans
-base séparée.
+base séparée. `oplaa-app` est un conteneur Caddy statique : le site vitrine
+(`oplaa.pro`, port interne 80) et l'app web (`app.oplaa.pro`, port interne
+8080) ; ses données sont sur Supabase.
 
 ## Prérequis
 
 - Un domaine (ou sous-domaine) par projet, pointant en DNS (A/AAAA) sur l'IP du serveur.
+  Pour Oplaa : `oplaa.pro`, `app.oplaa.pro` et `www.oplaa.pro`.
 - Ports 80 et 443 ouverts sur le serveur.
 
 ## Mise en route (une seule fois)
@@ -60,8 +63,15 @@ cp .env.prod.dist .env.prod   # renseigner LUDO_JWT_SECRET
 docker compose --env-file .env.prod -f compose.proxy.yaml up -d --build
 ```
 
+Pour Oplaa (statique, aucune variable à renseigner) :
+
+```bash
+cd ../oplaa
+docker compose -f compose.proxy.yaml up -d --build
+```
+
 Le proxy détecte les apps par leur alias réseau (`amui-app`, `chezmarcel-app`,
-`ludorules-app`) et route chaque domaine. Les certificats sont obtenus
+`ludorules-app`, `oplaa-app`) et route chaque domaine. Les certificats sont obtenus
 automatiquement au premier accès.
 
 ## Ajouter un projet
