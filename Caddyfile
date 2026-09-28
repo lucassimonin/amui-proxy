@@ -33,6 +33,12 @@ app.{$OPLAA_DOMAIN} {
 	reverse_proxy oplaa-app:8080
 }
 
+# WAZAZOO : front React (l'app proxifie elle-même /api vers Railway).
+{$WAZAZOO_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy wazazoo-app:80
+}
+
 # Redirections www → non-www (301) : évite le contenu dupliqué (SEO).
 # Nécessite un enregistrement DNS « www » pointant sur le serveur.
 www.{$AMUI_DOMAIN} {
@@ -49,4 +55,8 @@ www.{$LUDORULES_DOMAIN} {
 
 www.{$OPLAA_DOMAIN} {
 	redir https://{$OPLAA_DOMAIN}{uri} permanent
+}
+
+www.{$WAZAZOO_DOMAIN} {
+	redir https://{$WAZAZOO_DOMAIN}{uri} permanent
 }
