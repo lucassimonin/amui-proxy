@@ -39,6 +39,11 @@ app.{$OPLAA_DOMAIN} {
 	reverse_proxy wazazoo-app:80
 }
 
+{RESTOSTOCK_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy restostock-app:80
+}
+
 # Redirections www → non-www (301) : évite le contenu dupliqué (SEO).
 # Nécessite un enregistrement DNS « www » pointant sur le serveur.
 www.{$AMUI_DOMAIN} {
@@ -59,4 +64,8 @@ www.{$OPLAA_DOMAIN} {
 
 www.{$WAZAZOO_DOMAIN} {
 	redir https://{$WAZAZOO_DOMAIN}{uri} permanent
+}
+
+www.{RESTOSTOCK_DOMAIN} {
+	redir https://{RESTOSTOCK_DOMAIN}{uri} permanent
 }
