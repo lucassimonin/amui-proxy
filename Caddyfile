@@ -39,7 +39,7 @@ app.{$OPLAA_DOMAIN} {
 	reverse_proxy wazazoo-app:80
 }
 
-{RESTOSTOCK_DOMAIN} {
+{$RESTOSTOCK_DOMAIN} {
 	encode zstd gzip
 	reverse_proxy restostock-app:80
 }
