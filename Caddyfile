@@ -67,5 +67,5 @@ www.{$WAZAZOO_DOMAIN} {
 }
 
 www.{$RESTOSTOCK_DOMAIN} {
-	redir https://{RESTOSTOCK_DOMAIN}{uri} permanent
+	redir https://{$RESTOSTOCK_DOMAIN}{uri} permanent
 }
