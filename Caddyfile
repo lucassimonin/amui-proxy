@@ -44,6 +44,12 @@ app.{$OPLAA_DOMAIN} {
 	reverse_proxy restostock-app:80
 }
 
+# studio nogui : site vitrine statique (conteneur Caddy, port interne 80).
+{$NOGUI_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy nogui-app:80
+}
+
 # Redirections www → non-www (301) : évite le contenu dupliqué (SEO).
 # Nécessite un enregistrement DNS « www » pointant sur le serveur.
 www.{$AMUI_DOMAIN} {
@@ -68,4 +74,8 @@ www.{$WAZAZOO_DOMAIN} {
 
 www.{$RESTOSTOCK_DOMAIN} {
 	redir https://{$RESTOSTOCK_DOMAIN}{uri} permanent
+}
+
+www.{$NOGUI_DOMAIN} {
+	redir https://{$NOGUI_DOMAIN}{uri} permanent
 }

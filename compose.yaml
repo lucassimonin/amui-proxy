@@ -25,6 +25,7 @@ services:
       OPLAA_DOMAIN: ${OPLAA_DOMAIN:?domaine oplaa requis}
       RESTOSTOCK_DOMAIN: ${RESTOSTOCK_DOMAIN:?domaine restostock requis}
       WAZAZOO_DOMAIN: ${WAZAZOO_DOMAIN:?domaine wazazoo requis}
+      NOGUI_DOMAIN: ${NOGUI_DOMAIN:?domaine nogui requis}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data       # certificats TLS (persistants)
